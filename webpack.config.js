@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin') // 把 css 文件提取到单独的文件中
@@ -6,7 +5,6 @@ const FileManagerWebapckPlugin = require('filemanager-webpack-plugin') // 用于
 
 const NODE_ENV = process.env.NODE_ENV
 const isProduction = NODE_ENV === 'production'
-const EslintPlugin = require('eslint-webpack-plugin')
 
 module.exports = {
   devServer: {
@@ -23,7 +21,7 @@ module.exports = {
   },
   entry: './src/index.ts',
   mode: NODE_ENV,
-  devtool: 'hidden-source-map', // false, source-map: 生成 sourcemap 文件, cheap-source-map: 把模块代码通过 eval 包裹, cheap-module-eval-source-map:  适用于开发环境（生成的字符串可以缓存起来 ）, cheap-module-source-map: 加上 loader 之间的 sourcemap, 会把 sourcemap 以 base64 的方式内连到 js 中, hidden-source-map: 生产环境
+  devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -61,13 +59,6 @@ module.exports = {
           'sass-loader'
         ]
       },
-      // {
-      //   test: /\.less/,
-      //   use: [
-      //     'css-loader',
-      //     'less-loader'
-      //   ]
-      // }
       {
         test: /\.(png|jpe?g|bmp|webp|gif|svg)$/,
         use: [
@@ -107,20 +98,6 @@ module.exports = {
           }
         }
       },
-      // {
-      //   test: /\.(png|jpe?g|bmp|webp)$/,
-      //   // type: 'asset/resource' // 生成单独文件并导出 URL 地址
-      //   type: 'asset', // 根据输出文件和 base64 之间选择
-      //   parser: {
-      //     dataUrlCondition: {
-      //       maxSize: 1024
-      //     }
-      //   }
-      // },
-      {
-        test: /\.txt/,
-        type: 'asset/source'
-      }
     ]
   },
   plugins: [
@@ -128,9 +105,6 @@ module.exports = {
       template: './index.html'
     }),
     new MiniCssExtractPlugin(),
-    new EslintPlugin({
-      extensions: ['js', 'ts']
-    }),
     new FileManagerWebapckPlugin({
       events: {
         onStart: {
