@@ -9,7 +9,7 @@ const isProduction = NODE_ENV === 'production'
 module.exports = {
   devServer: {
     host: 'localhost',
-    port: 9000,
+    port: 9200,
     open: true,
     // compress: true, // gzip 压缩
     hot: true, // 启动支持模块热替换
@@ -49,13 +49,13 @@ module.exports = {
         ]
       },
       {
-        test: /\.(sc|le|c)ss$/, // 匹配的条件
+        test: /\.(s)css$/, // 匹配的条件
         use: [ // 从后往前执行
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          // 'style-loader', // 把 css-loader 处理的结果放到 style 标签内插入到 head 里
-          'css-loader', // 帮我们分析出各个 css 文件之间的关系，把各个css文件合并成一段 css
+          isProduction ?
+            MiniCssExtractPlugin.loader /* 把 css-loader 处理的结果打包到 css 文件以 link 的方式插入到 head 里 */ :
+            'style-loader' /* 把 css-loader 处理的结果放到 style 标签内插入到 head 里 */, 
+          'css-loader', // 帮我们分析出各个 css 文件之间的关系，把各个css文件合并成一段 css,
           'postcss-loader', // 将 css 解析成 ast, 然后对 ast 处理, 最后将处理的 ast 转换成 css
-          'less-loader',
           'sass-loader'
         ]
       },
