@@ -188,7 +188,59 @@ code {
 ```
 
 ### @extend
+继承样式
+```scss
+// input
+.error {
+  border: 1px #f00;
+  background-color: #fdd;
 
+  &--serious {
+    @extend .error;
+    border-width: 3px;
+  }
+}
+
+// output
+.error, .error--serious {
+  border: 1px #f00;
+  background-color: #fdd;
+}
+.error--serious {
+  border-width: 3px;
+}
+```
 ### @function
+```scss
+@function add($arg1, $arg2) {
+  @return $arg1 + $arg2;
+}
 
-### 
+div {
+  font-size: add(14px, 2px); // 输出 16px
+}
+```
+### @at-root
+用于在嵌套规则中跳出父级规则，并将样式应用于根级别。通常情况下，CSS 规则都是嵌套在父级规则中的，而 @at-root 可以让开发者在需要时跳出这种嵌套结构
+
+@at-root 只能用于属性和选择器，不能用于声明块中的语句，如变量声明、函数定义等
+```scss
+// input
+.parent {
+  .child {
+    font-size: 16px;
+    @at-root .sibling {
+      font-weight: bold;
+    }
+  }
+}
+
+// output
+.parent .child {
+  font-size: 16px;
+}
+
+.sibling {
+  font-weight: bold;
+}
+```
